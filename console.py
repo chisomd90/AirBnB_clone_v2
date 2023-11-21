@@ -115,19 +115,18 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    def helper_create(self, key, value):
+    def helper_q(self, value):
+            value = value.replace('_', ' ')
+            # value = value.replace('"', '\"')
+            return (value)
+
+    def helper_nq(self, key, value):
         if key in ("latitude", "longitude") or '.' in value:
             try:
                 value = float(value)
                 return(value)
             except ValueError:
                 return(0)
-
-        if type(value) is str:
-            value = value.replace('_', ' ')
-            # value = value.replace('"', '\"')
-            return (value)
-
         if value.isdigit():
             value = int(value)
             return (value)
@@ -152,10 +151,13 @@ class HBNBCommand(cmd.Cmd):
             kwargs = re.findall(pattern, atr)
             for kwarg in kwargs:
                 key, q_value, nq_value = kwarg
-                value = q_value if q_value else nq_value
-                fmt_value = self.helper_create(key, value)
-                if fmt_value:
-                    setattr(new_instance, key, fmt_value)
+                if q_value:
+                    value = self.helper_q(q_value)
+                else:
+                    value = self.helper_nq(key, nq_value)
+
+                if value:
+                    setattr(new_instance, key, value)
         print(new_instance.id)
         storage.save()
 
