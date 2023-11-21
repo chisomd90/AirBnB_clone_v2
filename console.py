@@ -2,6 +2,7 @@
 """ Console Module """
 import cmd
 import sys
+import re
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -113,31 +114,45 @@ class HBNBCommand(cmd.Cmd):
     def emptyline(self):
         """ Overrides the emptyline method of CMD """
         pass
+    def helper_create(self, key, value):
+        if key in ("latitude", "longitude") or '.' in value:
+            try:
+                value = float(value)
+                return(value)
+            except ValueError:
+                return(0)
+        if value.isdigit():
+            value = int(value)
+            return (value)
+
+        if type(value) is str:
+            value = value.replace('_', ' ')
+            #value = value.replace('"', '\"')
+            return (value)
 
     def do_create(self, args):
         """ Create an object of any class"""
         if not args:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+        if ' ' in args:
+            args_ = args.split(' ')
+
+        if args_[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
-        '''
-        if len(args) > 1:
-            list_ = args[1:]
-            for atr in list_:
-                kwargs = loads(atr)
-                for key, value in kwargs.items():
-                    if not (isinstance(value, str) or isinstance(value, float)
-                            or isinstance(value, int)):
-                        break
-                    if type(value) is str:
-                        value = value.replace('_', ' ')
-                        value = value.replace('"', '\"')
-                    new_instance.key = value
-                    '''
-        storage.save()
+        new_instance = HBNBCommand.classes[args_[0]]()
+        list_ = args_[1:]
+        #pattern = r'(\w+)=("([^"]+)"|([^"]+))'
+        pattern = r'(\w+)=(?:"([^"]+)"|([^"\s]+))'
+        for atr in list_:
+            kwargs = re.findall(pattern, atr)
+            for kwarg in kwargs:
+                key, q_value, nq_value = kwarg
+                value = q_value if q_value else nq_value
+                fmt_value = self.helper_create(key, value)
+                if fmt_value:
+                    setattr(new_instance, key, fmt_value)
         print(new_instance.id)
         storage.save()
 
