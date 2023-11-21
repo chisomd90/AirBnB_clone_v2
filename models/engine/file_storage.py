@@ -13,7 +13,7 @@ class FileStorage:
         if cls:
             try:
                 return FileStorage.__objects[cls]
-            except KeyError:
+            except (KeyError, NameError):
                 pass
         return FileStorage.__objects
 
@@ -61,5 +61,5 @@ class FileStorage:
         if obj:
             try:
                 del self.__objects[obj]
-            except KeyError:
+            except (KeyError, NameError):
                 pass
