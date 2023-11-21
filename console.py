@@ -153,7 +153,7 @@ class HBNBCommand(cmd.Cmd):
                 key, q_value, nq_value = kwarg
                 if q_value:
                     value = self.helper_q(q_value)
-                else:
+                elif nq_value:
                     value = self.helper_nq(key, nq_value)
 
                 if value:
