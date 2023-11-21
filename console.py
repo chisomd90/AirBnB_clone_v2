@@ -116,8 +116,9 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def helper_q(self, value):
+        if type(value) is str:
             value = value.replace('_', ' ')
-            # value = value.replace('"', '\"')
+            value = value.replace('"', '\"')
             return (value)
 
     def helper_nq(self, key, value):
