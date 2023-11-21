@@ -75,7 +75,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] == '{' and pline[-1] =='}'\
+                    if pline[0] == '{' and pline[-1] == '}'\
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -114,6 +114,7 @@ class HBNBCommand(cmd.Cmd):
     def emptyline(self):
         """ Overrides the emptyline method of CMD """
         pass
+
     def helper_create(self, key, value):
         if key in ("latitude", "longitude") or '.' in value:
             try:
@@ -127,7 +128,7 @@ class HBNBCommand(cmd.Cmd):
 
         if type(value) is str:
             value = value.replace('_', ' ')
-            #value = value.replace('"', '\"')
+            # value = value.replace('"', '\"')
             return (value)
 
     def do_create(self, args):
@@ -143,7 +144,7 @@ class HBNBCommand(cmd.Cmd):
             return
         new_instance = HBNBCommand.classes[args_[0]]()
         list_ = args_[1:]
-        #pattern = r'(\w+)=("([^"]+)"|([^"]+))'
+        # pattern = r'(\w+)=("([^"]+)"|([^"]+))'
         pattern = r'(\w+)=(?:"([^"]+)"|([^"\s]+))'
         for atr in list_:
             kwargs = re.findall(pattern, atr)
@@ -349,6 +350,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
