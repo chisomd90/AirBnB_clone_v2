@@ -122,14 +122,16 @@ class HBNBCommand(cmd.Cmd):
                 return(value)
             except ValueError:
                 return(0)
-        if value.isdigit():
-            value = int(value)
-            return (value)
 
         if type(value) is str:
             value = value.replace('_', ' ')
             # value = value.replace('"', '\"')
             return (value)
+
+        if value.isdigit():
+            value = int(value)
+            return (value)
+        return (0)
 
     def do_create(self, args):
         """ Create an object of any class"""
