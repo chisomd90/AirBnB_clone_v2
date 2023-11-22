@@ -37,7 +37,7 @@ class DBStorage():
         '''all method'''
         dict_ = {}
         # all_class = [User, Place, State, City, Amenity, Review]
-        all_class = [State, City]
+        all_class = [State, City, User]
         if cls:
             objs = self.__session.query(cls).all()
             for obj in objs:
