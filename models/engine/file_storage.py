@@ -39,6 +39,7 @@ class FileStorage:
         from models.city import City
         from models.amenity import Amenity
         from models.review import Review
+        from json.decoder import JSONDecodeError
 
         classes = {
                     'BaseModel': BaseModel, 'User': User, 'Place': Place,
@@ -47,11 +48,11 @@ class FileStorage:
                   }
         try:
             temp = {}
-            with open(FileStorage.__file_path, 'r') as f:
+            with open(self.__file_path, 'r') as f:
                 temp = json.load(f)
                 for key, val in temp.items():
                         self.all()[key] = classes[val['__class__']](**val)
-        except FileNotFoundError:
+        except (FileNotFoundError, JSONDecodeError):
             pass
 
 
